@@ -13,15 +13,13 @@ dataset = pd.read_csv('weatherAUS.csv')
 X = dataset.iloc[:,[1,2,3,4,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21]].values
 Y = dataset.iloc[:,-1].values
 
-
 Y = Y.reshape(-1,1)
-
 imputer = SimpleImputer(missing_values=np.nan,strategy='most_frequent')
 X = imputer.fit_transform(X)
 Y = imputer.fit_transform(Y)
-# data = datasets.load_breast_cancer()
-# X = data.data
-# y = data.target
+data = datasets.load_breast_cancer()
+X = data.data
+y = data.target
 from sklearn.preprocessing import LabelEncoder
 le1 = LabelEncoder()
 X[:,0] = le1.fit_transform(X[:,0])
@@ -37,19 +35,13 @@ le6 = LabelEncoder()
 Y[:,-1] = le6.fit_transform(Y[:,-1])
 
 
-
 Y = np.array(Y)
-# print(Y)
+
 from sklearn.preprocessing import StandardScaler
 sc = StandardScaler()
 X = sc.fit_transform(X)
 
 Y = Y.astype('int64').flatten()
-
-# print(X)
-# print(Y)
-
-
 
 X_train, X_test, Y_train, Y_test = train_test_split(
     X, Y, test_size=0.2, random_state=1000
@@ -65,3 +57,9 @@ predictions = clf.predict(X_test)
 
 acc =  accuracy(Y_test, predictions)
 print(acc)
+
+# Lưu mô hình
+import joblib
+# Save model using joblib
+joblib.dump(clf, 'svm_model.joblib')
+
